@@ -22,15 +22,18 @@ export default function LoginPage() {
         return;
       }
 
-      // Save token
+      // Apply token globally
       setAuthToken(res.token);
       localStorage.setItem("username", res.username);
       localStorage.setItem("isAdmin", res.is_admin ? "true" : "false");
       localStorage.setItem("token", res.token);
 
-      // Load subscription immediately
+      // Wait briefly for axios to attach token
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // Correct backend subscription endpoint
       try {
-        const sub = await apiGet("/my-subscription/");
+        const sub = await apiGet("/subscription/");
         localStorage.setItem("subscription", JSON.stringify(sub.subscription));
       } catch (e) {
         console.error("Failed loading subscription", e);
@@ -88,7 +91,9 @@ export default function LoginPage() {
 
         <p className="text-center mt-3">
           Don’t have an account?
-          <span onClick={() => navigate("/register")} className="text-green-600 cursor-pointer ml-1">Register</span>
+          <span onClick={() => navigate("/register")} className="text-green-600 cursor-pointer ml-1">
+            Register
+          </span>
         </p>
       </div>
     </div>

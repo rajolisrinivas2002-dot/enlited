@@ -5,14 +5,13 @@ export const API_BASE =
   import.meta.env.VITE_API_BASE ||
   "https://beneficial-quietude-production.up.railway.app/api";
 
+// Default axios instance (JSON)
 export const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
 });
 
-/* --------------------------------------------
-   Set Auth Token Globally (axios + LocalStorage)
----------------------------------------------- */
+// ---------------- Token Setup ---------------- //
 export function setAuthToken(token) {
   if (token) {
     api.defaults.headers.common["Authorization"] = `Token ${token}`;
@@ -23,34 +22,22 @@ export function setAuthToken(token) {
   }
 }
 
-/* --------------------------------------------
-   Clear Token + User Data on Logout
----------------------------------------------- */
 export function clearAuthToken() {
-  // remove token header
   delete api.defaults.headers.common["Authorization"];
-
-  // clear stored user info
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   localStorage.removeItem("isAdmin");
   localStorage.removeItem("postLoginRedirect");
-
-  // clear prediction sessions
   sessionStorage.clear();
 }
 
-/* --------------------------------------------
-   Load Token Automatically on Page Refresh
----------------------------------------------- */
+// Load token on refresh
 const savedToken = localStorage.getItem("token");
 if (savedToken) {
   api.defaults.headers.common["Authorization"] = `Token ${savedToken}`;
 }
 
-/* --------------------------------------------
-   Wrapper Methods
----------------------------------------------- */
+// ---------------- JSON Requests ---------------- //
 export async function apiGet(path) {
   const res = await api.get(path);
   return res.data;
@@ -69,4 +56,19 @@ export async function apiPut(path, body) {
 export async function apiDelete(path) {
   const res = await api.delete(path);
   return res.data;
+}
+
+// ---------------- FORM-DATA REQUEST (File Upload) ---------------- //
+export async function apiPostForm(path, formData) {
+  try {
+    const res = await api.post(path, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Let axios generate boundary
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("FORM POST ERROR:", path, err.response || err);
+    throw err;
+  }
 }
