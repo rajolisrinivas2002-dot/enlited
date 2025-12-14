@@ -4,9 +4,26 @@ import axios from "axios";
 // -----------------------------------------
 // BASE URL
 // -----------------------------------------
+// export const API_BASE =
+//   import.meta.env.VITE_API_BASE ||
+//   "https://magnificent-magic-production-eb98.up.railway.app/api/";
+
 export const API_BASE =
   import.meta.env.VITE_API_BASE ||
-  "http://127.0.0.1:8000/api/";
+  "https://ingenious-warmth-production-4a41.up.railway.app/api/";
+
+// export const API_BASE =
+//   import.meta.env.VITE_API_BASE ||
+//   "https://chchandra614-enlite-backend.hf.space/api/";
+
+
+// export const API_BASE =
+//   import.meta.env.VITE_API_BASE ||
+//   "https://enlite-2.onrender.com/api/";
+
+// export const API_BASE =
+//   import.meta.env.VITE_API_BASE ||
+//   "http://127.0.0.1:8000/api/";
 
 // Axios instance
 export const api = axios.create({
